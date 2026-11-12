@@ -1,0 +1,45 @@
+# FORME MUSIC · V3
+
+黑白韩系的纯前端本地音乐播放器，默认显示文件夹列表。**不需要百度网盘、OpenList、服务器 API 或账户。**
+
+## iPhone 使用方法
+
+1. 在 GitHub 创建一个**公开仓库**，例如 `forme-music`。
+2. 将本项目文件（`index.html`、`style.css`、`app.js`、`sw.js`、`cover.svg`、`icon.svg`、`icon-192.png`、`icon-512.png`、`manifest.webmanifest`）上传到仓库根目录。不要只上传 ZIP。
+3. 在仓库 `Settings → Pages → Build and deployment → Deploy from a branch` 中选择 `main` 和 `/ (root)`，保存。
+4. 打开 `https://你的GitHub用户名.github.io/forme-music/`，用 Safari 的分享菜单 → **添加到主屏幕**。
+5. 打开播放器，选择一个文件夹 → **导入本地 MP3**。导入时从 iPhone 的「文件」App 中选择文件。可一次选一个，也可以多选。文件会被复制进当前网站的 IndexedDB。
+6. 导入完成后点击歌曲播放。支持搜索、创建/重命名/删除文件夹、移动/删除歌曲、收藏、随机/循环/拖动进度。
+
+## 重要限制
+
+- **本地音频保存在该网站当前浏览器/主屏幕网页应用的 IndexedDB 中**，并不是写入 iPhone「文件」App。Safari 和主屏幕 PWA 可能拥有彼此独立的存储区域；建议固定使用一个入口导入和播放。
+- 本地音乐受 iOS 网页存储配额及系统清理机制影响，**不能保证永久保存**。请保留原始 MP3 文件，尤其不要删除百度网盘或「文件」App 中的备份。
+- **不会读取其他 App 的 MP3**，只能选择 iOS「文件」中可访问的音频；若文件还在百度网盘 App，需要先下载/保存到「文件」中，或通过系统文件选择器选择其提供的文件。
+- 已导入的音频会在本地播放，不会再次上传到后端。网络断开后，访问过的 PWA 页面在 Service Worker 可用且系统未清除缓存时仍能打开。
+- iOS 锁屏/控制中心是否显示歌曲信息由 Safari、系统版本以及播放状态决定。**灵动岛专辑封面、后台永不中断、音频优先级**不受网页控制，不能做出原生 App 级别的承诺。
+- 项目附赠的本地默认封面 `cover.svg` 可离线显示；你之前提供的图床地址未能在制作环境下载验证，因此没有打包其图像。
+- IndexedDB 音频文件不随 GitHub 仓库上传。重新换域名、清除网站数据、删除主屏幕 App 或换手机，可能丢失所有本地歌曲。
+- 建议在 Safari 普通模式而非无痕模式中使用。HTTPS 的 GitHub Pages 是首选部署方式；双击本地 HTML 不保证正常工作。
+
+## 目录结构
+
+```
+index.html            UI 结构
+style.css             黑白韩系样式，移动端响应式
+app.js                IndexedDB、文件夹、导入、播放、Media Session
+sw.js                 PWA 离线页面缓存
+cover.svg             离线默认封面
+icon.svg              网站小图标
+icon-192.png          PWA 图标
+icon-512.png          PWA 图标
+manifest.webmanifest  PWA 安装信息
+```
+
+## 开发时本地预览
+
+在项目目录运行 `python3 -m http.server 8080` 后访问 `http://localhost:8080/`。本地 HTTP 可以测试 IndexedDB，离线 SW 只有 HTTPS 或 localhost 的安全上下文才可使用。
+
+## 设计说明
+
+定位是「私人声音收藏室」，主界面为文件夹画册，独立歌单页、大图封面播放页、迷你播放栏，黑白灰配色与中英混排。不依赖付费 API。
