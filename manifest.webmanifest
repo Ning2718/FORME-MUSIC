@@ -1,0 +1,10 @@
+{
+  "name": "FORME MUSIC · 私人云端音乐",
+  "short_name": "FORME MUSIC",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#090909",
+  "theme_color": "#090909",
+  "description": "本地优先的私人 MP3 音乐播放器"
+}
